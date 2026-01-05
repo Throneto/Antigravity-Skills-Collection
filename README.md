@@ -1,18 +1,32 @@
-# AI Prompt Generator - 智能提示词生成系统
+# Skill Prompt Generator - 基于Skills的智能提示词生成系统
 
-一个基于Universal Elements Library的智能AI图像提示词生成系统，支持人像、设计、艺术、产品、视频等多个领域。
+**一个 Claude Code Skills 项目**，通过12个专业领域Skills，基于Universal Elements Library（1140+元素）生成高质量AI图像提示词。
+
+## 🎯 项目定位
+
+**这不是一个普通的Python工具，而是一个完整的Skills系统：**
+
+- 🎨 **Skills优先**：用户通过调用Skills生成提示词，不直接调用Python
+- 🧠 **智能路由**：自动识别领域（人像/艺术/设计/产品/视频），调用对应专家
+- 📦 **12个专业Skills**：每个领域有独立的专家Skill
+- 💾 **统一数据源**：所有Skills共享Universal Elements Library（1140+元素）
 
 ## ✨ 核心特性
 
-### 🎯 双轨制系统
-- **元素级生成**：从1140+个元素中智能选择组合
-- **模板级生成**：完整设计系统模板（如Apple PPT模板）
+### 🎯 Skills系统（核心）
+- **12个专业领域Skills**：intelligent-prompt-generator, art-master, design-master, product-master, video-master, universal-learner等
+- **智能领域路由**：自动识别用户需求，调用对应专家
+- **模块化架构**：每个Skill独立工作，协同配合
 
 ### 🧠 智能能力
 - **语义理解**：区分主体/风格/氛围
 - **常识推理**：自动推断合理属性（如人种→眼睛颜色）
 - **一致性检查**：自动检测并修正逻辑冲突
 - **框架驱动**：基于`prompt_framework.yaml`结构化生成
+
+### 📦 双轨制系统
+- **元素级生成**：从1140+个元素中智能选择组合
+- **模板级生成**：完整设计系统模板（如Apple PPT模板）
 
 ### 📦 支持领域
 - 📷 **portrait** - 人像摄影（502个元素）
@@ -25,13 +39,37 @@
 
 ## 🚀 快速开始
 
-### 安装依赖
+### 方式1：通过Skills使用（推荐）⭐
 
-```bash
-pip install -r requirements.txt
+**这是主要使用方式** - 在Claude Code中直接调用Skills：
+
+```
+# 人像摄影
+生成电影级的亚洲女性，张艺谋电影风格
+
+# 平面设计
+生成Bento Grid玻璃态海报
+
+# 艺术绘画
+生成中国水墨画山水
+
+# 产品摄影
+生成奢华手表产品摄影
 ```
 
-### 基本使用
+Claude Code会自动：
+1. 识别领域（人像/设计/艺术/产品）
+2. 调用对应的专家Skill
+3. 返回完美的提示词
+
+### 方式2：直接调用Python引擎（开发/调试）
+
+如果你想直接调用底层引擎：
+
+```bash
+# 安装依赖
+pip install -r requirements.txt
+```
 
 ```python
 from intelligent_generator import IntelligentGenerator
@@ -57,77 +95,104 @@ print(prompt)
 gen.close()
 ```
 
-### 使用框架驱动生成器
-
-```python
-from framework_loader import FrameworkDrivenGenerator
-
-gen = FrameworkDrivenGenerator()
-
-# 查询所有候选元素
-candidates = gen.query_all_candidates_by_framework(intent)
-
-# 选择最优元素并生成
-prompt = gen.generate_prompt_from_intent(intent)
-```
+**注意**：直接调用Python引擎主要用于开发和调试，日常使用建议通过Skills。
 
 ## 📖 项目结构
 
 ```
-├── intelligent_generator.py      # 核心生成引擎
-├── framework_loader.py            # 框架驱动加载器
-├── prompt_framework.yaml          # 人像提示词框架定义
-├── element_db.py                  # 数据库操作
-├── .claude/
-│   └── skills/                    # Claude Code Skills
-│       ├── intelligent-prompt-generator/
-│       ├── design-master/
-│       ├── universal-learner/
-│       └── ...
+.
+├── .claude/                       # ⭐ Skills系统（核心）
+│   ├── CLAUDE.md                  # 项目规则和Skill路由指南
+│   └── skills/                    # 12个专业领域Skills
+│       ├── intelligent-prompt-generator/  # 人像提示词专家
+│       ├── art-master/            # 艺术风格专家
+│       ├── design-master/         # 平面设计专家
+│       ├── product-master/        # 产品摄影专家
+│       ├── video-master/          # 视频生成专家
+│       ├── universal-learner/     # 学习系统
+│       ├── prompt-analyzer/       # 提示词分析
+│       ├── prompt-extractor/      # 元素提取
+│       ├── prompt-generator/      # 通用生成器
+│       ├── prompt-master/         # 主控调度
+│       ├── prompt-xray/           # X-Ray分析
+│       └── domain-classifier/     # 领域分类
+│
+├── intelligent_generator.py       # Python引擎：核心生成
+├── framework_loader.py            # Python引擎：框架加载
+├── element_db.py                  # Python引擎：数据库操作
+├── prompt_framework.yaml          # 人像框架定义
+│
 ├── extracted_results/
 │   └── elements.db                # Universal Elements Library (1140+元素)
-└── knowledge_base/                # 知识库
+│
+├── requirements.txt               # Python依赖
+└── README.md                      # 项目文档
 ```
+
+**架构说明**：
+- **用户层**：通过Claude Code调用Skills
+- **Skills层**：12个专业领域专家（.claude/skills/）
+- **引擎层**：Python引擎支持Skills运行
+- **数据层**：Universal Elements Library（1140+元素）
 
 ## 🎨 使用示例
 
-### 示例1：生成韩系马卡龙色人像
+### 示例1：人像摄影（intelligent-prompt-generator skill）
 
-```python
-intent = {
-    'subject': {'gender': 'female', 'ethnicity': 'East_Asian'},
-    'styling': {'makeup': 'k_beauty', 'clothing': 'modern'},
-    'lighting': {'lighting_type': 'natural'},
-    'scene': {'atmosphere': 'fashion'}
-}
-
-prompt = gen.generate_from_intent(intent)
-# 输出: Korean fashion photography, young Korean woman in pastel macaroon-colored modern outfit...
+**用户请求**：
+```
+生成电影级的亚洲女性，张艺谋电影风格
 ```
 
-### 示例2：使用Apple PPT模板
+**Skill自动处理**：
+- 识别：人像摄影领域
+- 调用：intelligent-prompt-generator skill
+- 生成：电影级人像提示词，包含戏剧性光影
 
-```python
-# 查询模板
-template = query_design_template('apple_soft_blue_ppt')
-
-# 获取完整的12元素系统
-# 包括：背景、布局、配色、字体、视觉效果
+**输出提示词**：
+```
+Cinematic portrait of young East Asian woman, dramatic lighting with rim light
+and chiaroscuro effect, Zhang Yimou's signature color palette with rich reds
+and golds, 85mm lens, shallow depth of field, film grain texture...
 ```
 
-### 示例3：超写实人像摄影
+### 示例2：平面设计（design-master skill）
 
-```python
-intent = {
-    'subject': {'gender': 'male', 'age_range': 'young_adult'},
-    'facial': {'skin_texture': 'hyper_realistic_with_details'},
-    'lighting': {'lighting_type': 'overcast_cinematic'},
-    'technical': {'photography': '85mm_shallow_dof', 'post_processing': 'hdr'}
-}
-
-prompt = gen.generate_from_intent(intent)
-# 超写实效果：可见毛孔、自然疤痕、电影级光影
+**用户请求**：
 ```
+生成Apple风格PPT模板
+```
+
+**Skill自动处理**：
+- 识别：平面设计领域
+- 调用：design-master skill
+- 查询：Apple淡蓝商务PPT模板（12个元素完整系统）
+
+**输出**：完整模板系统，包括背景、布局、配色、字体、视觉效果
+
+### 示例3：艺术绘画（art-master skill）
+
+**用户请求**：
+```
+生成中国水墨画山水
+```
+
+**Skill自动处理**：
+- 识别：艺术绘画领域（无人物）
+- 调用：art-master skill
+- 生成：包含笔触、留白、泼墨等技法的提示词
+
+### 示例4：产品摄影（product-master skill）
+
+**用户请求**：
+```
+生成奢华手表产品摄影
+```
+
+**Skill自动处理**：
+- 识别：产品摄影领域
+- 调用：product-master skill
+- 生成：商业级产品摄影提示词
 
 ## 🛠️ 核心功能
 
