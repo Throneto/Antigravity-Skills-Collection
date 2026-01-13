@@ -787,6 +787,7 @@ class IntelligentGenerator:
             keywords = elem.get('keywords')
 
             # 选择文本
+            text_list = None
             if mode == 'simple':
                 text = template
             elif mode == 'detailed' and keywords and len(keywords) > 0:
@@ -795,7 +796,7 @@ class IntelligentGenerator:
                 text_list = keywords[:keywords_limit]
             else:
                 text = template
-                text_list = None
+                # text_list is already None from initialization
 
             # 如果有keywords列表，逐个处理
             if text_list:
