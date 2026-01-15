@@ -3,7 +3,7 @@ anthropic>=0.7.0
 pyyaml>=6.0
 
 # Database
-sqlite3  # Built-in with Python
+
 
 # PPT Generation (NanoBanana)
 google-genai>=0.2.0

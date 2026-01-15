@@ -36,6 +36,7 @@ from mcp_server.tools.element_query import (
 from mcp_server.tools.consistency_checker import check_consistency, format_report, format_report_json
 from mcp_server.tools.prompt_composer import compose_prompt, format_prompt_output
 from mcp_server.tools.ppt_skill import generate_ppt
+from mcp_server.tools.image_generator import generate_image, format_result_json
 
 # Import prompts
 from mcp_server.prompts.portrait import generate_portrait_prompt_sop, generate_cinematic_portrait_sop
@@ -206,6 +207,50 @@ def nanobanana_ppt_generator(
     """
     return generate_ppt(description, pages, style, resolution)
 
+
+@mcp.tool()
+def generate_ai_image(
+    prompt: str,
+    output_dir: str = "",
+    aspect_ratio: str = "1:1",
+    resolution: str = "2K"
+) -> str:
+    """
+    使用 Gemini 3 Pro 生成 AI 图片。
+    
+    这是工作流的最终输出步骤，将提示词转换为实际图片。
+    
+    Args:
+        prompt: 图片生成提示词（建议使用 compose_final_prompt 生成）
+        output_dir: 输出目录路径（可选，默认为 outputs/）
+        aspect_ratio: 宽高比 - "1:1", "16:9", "9:16", "4:3", "3:4"
+        resolution: 分辨率 - "2K" 或 "4K"
+    
+    Returns:
+        JSON 格式的生成结果，包含图片路径或错误信息
+    
+    Example:
+        generate_ai_image("A beautiful sunset, cinematic lighting", aspect_ratio="16:9")
+    """
+    import os
+    from datetime import datetime
+    
+    # Build output path
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_path = os.path.join(output_dir, f"generated_{timestamp}.png")
+    else:
+        output_path = None  # Let generate_image auto-generate
+    
+    result = generate_image(
+        prompt=prompt,
+        output_path=output_path,
+        aspect_ratio=aspect_ratio,
+        resolution=resolution
+    )
+    
+    return format_result_json(result)
 
 # ============================================================
 # Orchestration Prompts
